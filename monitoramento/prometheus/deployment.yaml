@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-deploy
+  namespace: monitoramento
+spec:
+  selector:
+    matchLabels:
+      app: prometheus-deploy
+  template:
+    metadata:
+      labels:
+        app: prometheus-deploy
+        env: all
+    spec:
+      containers:
+      - name: prometheus-deploy
+        image: prom/prometheus
+        resources:
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+          requests: 
+            memory: "1Gi"
+            cpu: "500m"        
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/prometheus/prometheus.yaml
+            subPath: prometheus.yaml
+          - name: prometheus-volume
+            mountPath: /prometheus                  
+        ports:
+        - containerPort: 9090
+        args:
+        - "--config.file=/etc/prometheus/prometheus.yaml"
+        - "--storage.tsdb.path=/prometheus"        
+      volumes:
+        - name: config-volume
+          configMap:
+            name: prometheus-configmap
+        - name: prometheus-volume
+          persistentVolumeClaim:
+            claimName: prometheus-azurefile

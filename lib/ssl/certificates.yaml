@@ -1,0 +1,23 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: miniapi-staging
+  namespace: qa
+spec:
+  secretName: miniapi-staging-certificate
+  issuerRef:
+    name: letsencrypt-staging
+  dnsNames:
+  - api-qa.rock-devops.ml
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: miniapi-production
+  namespace: prod
+spec:
+  secretName: miniapi-production-certificate
+  issuerRef:
+    name: letsencrypt-prod
+  dnsNames:
+  - api.rock-devops.ml

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-deploy
+  namespace: monitoramento
+spec:
+  selector:
+    matchLabels:
+      app: grafana-deploy
+  template:
+    metadata:
+      labels:
+        app: grafana-deploy
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port:   '3000'           
+    spec:
+      containers:
+      - name: grafana-deploy
+        image: grafana/grafana:5.3.2
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - mountPath: /var/lib/grafana
+          name: grafana-storage
+        - mountPath: /etc/grafana/provisioning/datasources
+          name: grafana-storage-datasources
+          readOnly: false
+        resources:
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+          requests: 
+            memory: "1Gi"
+            cpu: "500m"          
+      volumes:
+      - name: grafana-storage
+        emptyDir: {}
+      - name: grafana-storage-datasources
+        emptyDir: {}
