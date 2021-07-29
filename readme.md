@@ -80,3 +80,7 @@ http://prometheus-service:9090
 
 # Import dashboards
 10000 e 8588
+
+# @TODO
+* Criar cluster K8S usando Terraform (interno)
+* Adicionar LB ou ApiGateway acima do K8S (externo)
